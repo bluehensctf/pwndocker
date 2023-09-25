@@ -1,9 +1,8 @@
 FROM phusion/baseimage:focal-1.2.0
-LABEL maintainer="skysider <skysider@163.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV TZ Asia/Shanghai
+ENV TZ Etc/UTC
 
 RUN dpkg --add-architecture i386 && \
     apt-get -y update && \
@@ -73,16 +72,16 @@ RUN gem install one_gadget seccomp-tools && rm -rf /var/lib/gems/2.*/cache/*
 RUN git clone --depth 1 https://github.com/pwndbg/pwndbg && \
     cd pwndbg && chmod +x setup.sh && ./setup.sh
 
-RUN git clone --depth 1 https://github.com/scwuaptx/Pwngdb.git ~/Pwngdb && \
-    cd ~/Pwngdb && mv .gdbinit .gdbinit-pwngdb && \
-    sed -i "s?source ~/peda/peda.py?# source ~/peda/peda.py?g" .gdbinit-pwngdb && \
-    echo "source ~/Pwngdb/.gdbinit-pwngdb" >> ~/.gdbinit
+#RUN git clone --depth 1 https://github.com/scwuaptx/Pwngdb.git ~/Pwngdb && \
+#    cd ~/Pwngdb && mv .gdbinit .gdbinit-pwngdb && \
+#    sed -i "s?source ~/peda/peda.py?# source ~/peda/peda.py?g" .gdbinit-pwngdb && \
+#    echo "source ~/Pwngdb/.gdbinit-pwngdb" >> ~/.gdbinit
 
-RUN wget -O ~/.gdbinit-gef.py -q http://gef.blah.cat/py
+RUN wget -O ~/.gdbinit-gef.py -q https://raw.githubusercontent.com/hugsy/gef/main/gef.py
 
-RUN git clone --depth 1 https://github.com/niklasb/libc-database.git libc-database && \
-    cd libc-database && ./get ubuntu debian || echo "/libc-database/" > ~/.libcdb_path && \
-    rm -rf /tmp/*
+#RUN git clone --depth 1 https://github.com/niklasb/libc-database.git libc-database && \
+#    cd libc-database && ./get ubuntu debian || echo "/libc-database/" > ~/.libcdb_path && \
+#    rm -rf /tmp/*
 
 WORKDIR /ctf/work/
 
@@ -119,9 +118,10 @@ COPY --from=skysider/glibc_builder32:2.35 /glibc/2.35/32 /glibc/2.35/32
 COPY --from=skysider/glibc_builder64:2.36 /glibc/2.36/64 /glibc/2.36/64
 COPY --from=skysider/glibc_builder32:2.36 /glibc/2.36/32 /glibc/2.36/32
 
-COPY linux_server linux_server64  /ctf/
+#COPY linux_server linux_server64  /ctf/
 
-RUN chmod a+x /ctf/linux_server /ctf/linux_server64
+#RUN chmod a+x /ctf/linux_server /ctf/linux_server64
+
 
 ARG PWNTOOLS_VERSION
 
