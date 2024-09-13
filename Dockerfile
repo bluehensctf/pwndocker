@@ -1,4 +1,4 @@
-FROM phusion/baseimage:focal-1.2.0
+FROM phusion/baseimage:jammy-1.0.4
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -51,9 +51,9 @@ RUN version=$(curl -s https://api.github.com/repos/radareorg/radare2/releases/la
     wget https://github.com/radareorg/radare2/releases/download/${version}/radare2_${version}_amd64.deb && \
     dpkg -i radare2_${version}_amd64.deb && rm radare2_${version}_amd64.deb
 
-RUN python3 -m pip config set global.index-url http://pypi.tuna.tsinghua.edu.cn/simple && \
-    python3 -m pip config set global.trusted-host pypi.tuna.tsinghua.edu.cn && \
-    python3 -m pip install -U pip && \
+#RUN python3 -m pip config set global.index-url http://pypi.tuna.tsinghua.edu.cn/simple && \
+#    python3 -m pip config set global.trusted-host pypi.tuna.tsinghua.edu.cn && \
+RUN python3 -m pip install -U pip && \
     python3 -m pip install --no-cache-dir \
     ropgadget \
     z3-solver \
